@@ -1,0 +1,58 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: jnp-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: gogo@2026
+      POSTGRES_DB: jnp_smart_request_api
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d jnp_smart_request_api"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+      args:
+        DATABASE_URL: "postgresql://postgres:gogo%402026@postgres:5432/jnp_smart_request_api"
+    container_name: jnp-smart-request-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - ./api/.env
+    environment:
+      DATABASE_URL: "postgresql://postgres:gogo%402026@postgres:5432/jnp_smart_request_api"
+      NODE_ENV: production
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    volumes:
+      - uploads_data:/app/uploads
+    command: sh -c "npx prisma migrate deploy && npm run seed:prod && node dist/src/main.js"
+
+  front:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    container_name: jnp-smart-request-front
+    restart: unless-stopped
+    depends_on:
+      - api
+    env_file:
+      - ./front/.env
+    ports:
+      - "5173:3000"
+
+volumes:
+  postgres_data:
+  uploads_data:
