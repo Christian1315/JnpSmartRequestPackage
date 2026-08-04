@@ -16,7 +16,7 @@ export class UserSeeders {
             throw new Error('Rôle "Super Administrateur" introuvable — vérifiez que rolesSeeder tourne avant userSeeder.');
         }
 
-        const users = [
+        const data = [
             {
                 fullname: 'Super administrateur',
                 email: "admin@gmail.com",
@@ -25,12 +25,18 @@ export class UserSeeders {
             },
         ];
 
-        // Supprimer les users existants pour éviter les doublons
-        await this.prisma.user.deleteMany();
+
+        // TRUNCATE avec RESTART IDENTITY : vide la table ET remet la séquence auto-increment à 1
+        await this.prisma.$executeRawUnsafe(
+            `TRUNCATE TABLE "users" RESTART IDENTITY CASCADE;`
+        );
+
+        // // Supprimer les users existants pour éviter les doublons
+        // await this.prisma.user.deleteMany();
 
         // Insertion de nouveaux users
         await this.prisma.user.createMany({
-            data: users,
+            data: data,
         });
 
         console.log('Users insérés avec succès.');
