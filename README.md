@@ -49,4 +49,4 @@ docker compose up --build
 
 ## Accès au projet
 FRONT: localhost:5173
-BACK: localhost:5173
+BACK: localhost:3000
