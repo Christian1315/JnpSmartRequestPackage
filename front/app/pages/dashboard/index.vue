@@ -13,6 +13,8 @@ import { toast } from 'vue-sonner'
 const axios = useAxios()
 
 import { apiRoutes } from '~/endpoints/api'
+import DashboardDemandesTable from '~/components/table/DashboardDemandesTable.vue'
+
 const totalCount = ref<number>(0)
 const isPendindCount = ref<number>(0)
 const isSumbitedCount = ref<number>(0)
@@ -95,7 +97,7 @@ const stats = [
       <CardTitle>Panel des demandes</CardTitle>
     </CardHeader>
     <CardContent>
-      <DemandesTable />
+      <DashboardDemandesTable />
     </CardContent>
   </Card>
 </template>

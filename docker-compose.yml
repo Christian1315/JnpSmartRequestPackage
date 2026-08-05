@@ -4,9 +4,9 @@ services:
     container_name: jnp-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: gogo@2026
-      POSTGRES_DB: jnp_smart_request_api
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5432:5432"
     volumes:
@@ -22,7 +22,7 @@ services:
       context: ./api
       dockerfile: Dockerfile
       args:
-        DATABASE_URL: "postgresql://postgres:gogo%402026@postgres:5432/jnp_smart_request_api"
+        DATABASE_URL: ${DATABASE_URL}
     container_name: jnp-smart-request-api
     restart: unless-stopped
     depends_on:
@@ -31,7 +31,7 @@ services:
     env_file:
       - ./api/.env
     environment:
-      DATABASE_URL: "postgresql://postgres:gogo%402026@postgres:5432/jnp_smart_request_api"
+      DATABASE_URL: ${DATABASE_URL}
       NODE_ENV: production
       PORT: 3000
     ports:

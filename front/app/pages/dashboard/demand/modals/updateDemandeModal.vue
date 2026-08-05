@@ -16,9 +16,22 @@ import { PencilLine, SquareArrowRightEnter, X } from 'lucide-vue-next'
 
 const axios = useAxios()
 import { apiRoutes } from '~/endpoints/api'
+const user = ref<any>(null)
 
 // ── v-model pour ouverture/fermeture du modal ───────────────
 const open = defineModel<boolean>('open', { default: false })
+
+  onMounted(() => {
+  try {
+    user.value = JSON.parse(localStorage.getItem("user") || 'null')
+    console.log('User:', user) // Debugging line
+    console.log('Permissions:', user.value?.permissions?.map((pr: any) => ({ id: pr.id, name: per.name }))) // Debugging line
+  } catch (e) {
+    console.error('User JSON invalide, reset localStorage', e)
+    localStorage.removeItem("user")
+    user.value = null
+  }
+})
 
 // ── La demande à modifier, passée en prop depuis le tableau ────
 const props = defineProps<{
@@ -318,7 +331,7 @@ async function submitUpdateForm(e: Event) {
           <div class="col-md-6">
             <div class="mb-2">
               <Label for="siteId" class="mb-1">Statut <span class="text-danger">*</span></Label>
-              <FilterSelect :options="statuts?.filter((st)=>(st.id<2)).map((s) => ({ id: s.id, label: s.name }))" 
+              <FilterSelect :options="statuts?.filter((st)=>(user.value?.roleId!=3?st.id<3:st.id>2)).map((s) => ({ id: s.id, label: s.name }))" 
                 :selected="props.demand?.statut_id"
                 @select="handleStatutSelect" />
               <span v-if="errors.statut_id" class="text-danger">{{ errors.statut_id }}</span>

@@ -4,7 +4,7 @@ import { provideAppContext } from '~/composables/useAppContext'
 provideAppContext()
 </script>
 
-<template>
+<template class="m-0">
   <NuxtLayout>
     <NuxtPage />
     <NuxtRouteAnnouncer />
