@@ -140,12 +140,12 @@ async function submitForm(e: Event) {
         <div class="row">
           <div class="col-md-12">
             <div class="mb-2">
-              <Label for="categoryId" class="mb-1">Demande <span class="text-danger">*</span></Label>
-              <FilterSelect
-                :options="requests?.filter((rq) => (rq.statut_id != 7)).map((c) => ({ id: c.id, label: `${c.code} - ${c.statut?.name}` }))"
-                :selected="data.request_id" @select="handleRequestSelect" />
-              <span v-if="errors.request_id" class="text-danger">{{ errors.request_id }}</span>
-            </div>
+            <Label for="" class="mb-1">Demande <span class="text-danger">*</span></Label>
+            <FilterSelect
+              :options="requests?.filter((rq) => (rq.statut_id != 7 && rq.statut_id > 1)).map((c) => ({ id: c.id, label: `${c.code} - ${c.statut?.name}` }))"
+              :selected="data.request_id" @select="handleRequestSelect" />
+            <span v-if="errors.request_id" class="text-danger">{{ errors.request_id }}</span>
+          </div>
           </div>
 
            <div class="col-md-12">

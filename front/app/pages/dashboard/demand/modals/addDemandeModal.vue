@@ -174,7 +174,13 @@ async function submitDemandeForm(e: Event) {
     await toast.promise(
       // FormData : axios génère automatiquement le bon Content-Type avec son boundary,
       // il ne faut jamais le fixer à la main (voir échanges précédents sur ce sujet).
-      axios.post(apiRoutes.createDemande, formData),
+      axios.post(apiRoutes.createDemande, formData,
+        {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+      ),
       {
         loading: 'Création de la demande ...',
         success: (res: any) => {

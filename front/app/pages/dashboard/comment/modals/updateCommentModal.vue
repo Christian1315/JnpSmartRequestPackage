@@ -167,6 +167,13 @@ async function submitUpdateForm(e: Event) {
 
       <form @submit="submitUpdateForm" class="bg-light p-3 rounded">
         <div class="row">
+          <div class="mb-2">
+            <Label for="" class="mb-1">Demande <span class="text-danger">*</span></Label>
+            <FilterSelect
+              :options="requests?.filter((rq) => (rq.statut_id != 7 && rq.statut_id > 1)).map((c) => ({ id: c.id, label: `${c.code} - ${c.statut?.name}` }))"
+              :selected="data.request_id" @select="handleRequestSelect" />
+            <span v-if="errors.request_id" class="text-danger">{{ errors.request_id }}</span>
+          </div>
 
           <div class="col-md-12">
             <div class="mb-2">
@@ -174,16 +181,6 @@ async function submitUpdateForm(e: Event) {
               <Textarea id="comment" name="description" placeholder="Laisez un commentaire..." required
                 v-model="data.comment" @input="handleChange" />
               <span v-if="errors.comment" class="text-danger">{{ errors.comment }}</span>
-            </div>
-          </div>
-
-          <div class="col-md-12">
-            <div class="mb-2">
-              <Label for="categoryId" class="mb-1">Demande <span class="text-danger">*</span></Label>
-              <FilterSelect
-                :options="requests?.filter((rq) => (rq.statut_id != 7)).map((c) => ({ id: c.id, label: `${c.code} - ${c.statut?.name}` }))"
-                :selected="data.request_id" @select="handleRequestSelect" />
-              <span v-if="errors.request_id" class="text-danger">{{ errors.request_id }}</span>
             </div>
           </div>
         </div>
